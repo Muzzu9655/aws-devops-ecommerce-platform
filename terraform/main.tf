@@ -73,19 +73,7 @@ resource "aws_route_table_association" "public_b" {
 # ------------------------
 # S3 Bucket
 # ------------------------
-resource "random_id" "bucket_id" {
-  byte_length = 4
-}
 
-resource "aws_s3_bucket" "product_images" {
-  bucket = "ecommerce-product-images-${random_id.bucket_id.hex}"
-  tags = { Name = "product-images" }
-}
-
-resource "aws_s3_bucket_acl" "product_images_acl" {
-  bucket = aws_s3_bucket.product_images.id
-  acl    = "private"
-}
 
 # ------------------------
 # Security Group for RDS
