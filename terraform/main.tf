@@ -169,9 +169,7 @@ resource "aws_eks_cluster" "main" {
 # ------------------------
 # Outputs
 # ------------------------
-output "s3_bucket_name" {
-  value = aws_s3_bucket.product_images.bucket
-}
+
 
 output "db_endpoint" {
   value = aws_db_instance.mysql.endpoint
