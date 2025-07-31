@@ -50,6 +50,10 @@ resource "aws_subnet" "private_b" {
 # ------------------------
 resource "aws_s3_bucket" "product_images" {
   bucket = "ecommerce-product-images-${random_id.bucket_id.hex}"
+}
+
+resource "aws_s3_bucket_acl" "product_images_acl" {
+  bucket = aws_s3_bucket.product_images.id
   acl    = "private"
 }
 
@@ -66,7 +70,7 @@ resource "aws_db_instance" "mysql" {
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t3.micro"
-  name                 = "ordersdb"
+  db_name              = "ordersdb"         # FIXED
   username             = "admin"
   password             = "Admin12345"
   parameter_group_name = "default.mysql8.0"
