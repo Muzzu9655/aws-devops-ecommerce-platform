@@ -1,29 +1,40 @@
 provider "aws" {
   region = "us-east-1"
 }
+
+# ------------------------
+# Random ID for unique S3 bucket name
+# ------------------------
+resource "random_id" "bucket_id" {
+  byte_length = 4
+}
+
 # ------------------------
 # VPC
 # ------------------------
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = { Name = "devops-vpc" }
 }
 
+# ------------------------
+# Subnets
+# ------------------------
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
-  map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
   tags = { Name = "public-a" }
 }
 
 resource "aws_subnet" "public_b" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.2.0/24"
-  map_public_ip_on_launch = true
   availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
   tags = { Name = "public-b" }
 }
 
@@ -42,7 +53,7 @@ resource "aws_subnet" "private_b" {
 }
 
 # ------------------------
-# Internet Gateway & Route Table for Public Subnets
+# Internet Gateway & Route Table
 # ------------------------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
@@ -71,9 +82,12 @@ resource "aws_route_table_association" "public_b" {
 }
 
 # ------------------------
-# S3 Bucket
+# S3 Bucket (no ACL, private by default)
 # ------------------------
-
+resource "aws_s3_bucket" "product_images" {
+  bucket = "ecommerce-product-images-${random_id.bucket_id.hex}"
+  tags = { Name = "product-images" }
+}
 
 # ------------------------
 # Security Group for RDS
@@ -107,22 +121,22 @@ resource "aws_db_subnet_group" "rds_subnets" {
 }
 
 # ------------------------
-# RDS Instance
+# RDS Instance (MySQL)
 # ------------------------
 resource "aws_db_instance" "mysql" {
-  allocated_storage    = 20
-  storage_type         = "gp2"
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t3.micro"
-  db_name              = "ordersdb"
-  username             = "admin"
-  password             = "Admin12345"
-  parameter_group_name = "default.mysql8.0"
-  skip_final_snapshot  = true
-  db_subnet_group_name = aws_db_subnet_group.rds_subnets.name
+  allocated_storage      = 20
+  storage_type           = "gp2"
+  engine                 = "mysql"
+  engine_version         = "8.0"
+  instance_class         = "db.t3.micro"
+  db_name                = "ordersdb"
+  username               = "admin"
+  password               = "Admin12345"
+  parameter_group_name   = "default.mysql8.0"
+  skip_final_snapshot    = true
+  db_subnet_group_name   = aws_db_subnet_group.rds_subnets.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
-  publicly_accessible  = false
+  publicly_accessible    = false
 }
 
 # ------------------------
@@ -169,7 +183,9 @@ resource "aws_eks_cluster" "main" {
 # ------------------------
 # Outputs
 # ------------------------
-
+output "s3_bucket_name" {
+  value = aws_s3_bucket.product_images.bucket
+}
 
 output "db_endpoint" {
   value = aws_db_instance.mysql.endpoint
