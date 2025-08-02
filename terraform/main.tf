@@ -92,12 +92,13 @@ resource "aws_db_instance" "mysql" {
   engine                 = "mysql"
   engine_version         = "8.0"
   instance_class         = "db.t3.micro"
-  name                   = "ecomdb"
+  db_name                = "ecomdb"         # ✅ correct argument
   username               = "admin"
   password               = "Admin12345"
   db_subnet_group_name   = aws_db_subnet_group.db.name
   skip_final_snapshot    = true
   publicly_accessible    = true
+
 }
 
 ##########################################
