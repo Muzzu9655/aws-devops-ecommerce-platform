@@ -29,18 +29,17 @@ Designed for free-tier usage to prevent unnecessary AWS costs.
 
 ------------------------------------------------------------
 
-Project Structure
-aws-devops-ecommerce-platform/
-main.tf        - Core Terraform configuration
-variables.tf   - Input variables for reusability
-outputs.tf     - Key outputs for reference
-providers.tf   - AWS provider configuration
-README.md      - Project documentation
-.gitignore     - Ignore Terraform state & cache
+# Project Structure
+# aws-devops-ecommerce-platform/Terraform
+- main.tf - Terraform Configuration
+- variables.tf - Input variables 
+- outputs.tf  - Key outputs
+- README.md      - Project documentation
+-:.gitignore     - Ignore Terraform state & cache
 
 ------------------------------------------------------------
 
-How to Deploy
+# How to Deploy
 
 Note: Deployment is optional. This project can be showcased without live infra to avoid AWS costs.
 
@@ -58,7 +57,7 @@ terraform destroy
 
 ------------------------------------------------------------
 
-Outputs
+# Outputs
 After applying, Terraform will display:
 - S3 bucket name for assets
 - DynamoDB table name
@@ -67,14 +66,14 @@ After applying, Terraform will display:
 
 ------------------------------------------------------------
 
-Cost & Deployment Notes
+# Cost & Deployment Notes
 - This architecture is free-tier friendly (serverless-first)
 - Do not keep resources running if you want to avoid charges
 - terraform destroy removes all resources after testing
 
 ------------------------------------------------------------
 
-Future Enhancements
+# Future Enhancements
 - Add CI/CD pipeline using GitHub Actions
 - Containerize backend with AWS Fargate (ECS)
 - Add CloudFront CDN for global performance
