@@ -1,56 +1,29 @@
-# ------------------------
-# General Variables
-# ------------------------
 variable "aws_region" {
-  description = "AWS region"
+  description = "AWS region to deploy resources"
+  type        = string
   default     = "us-east-1"
 }
 
-# ------------------------
-# VPC Variables
-# ------------------------
-variable "vpc_cidr" {
-  default = "10.0.0.0/16"
+variable "s3_bucket_name" {
+  description = "S3 bucket name for storing static assets"
+  type        = string
+  default     = "muzamil-ecommerce-assets"
 }
 
-variable "public_subnet_a_cidr" {
-  default = "10.0.1.0/24"
+variable "dynamodb_table_name" {
+  description = "DynamoDB table for products and carts"
+  type        = string
+  default     = "ecommerce-products"
 }
 
-variable "public_subnet_b_cidr" {
-  default = "10.0.2.0/24"
+variable "lambda_zip_path" {
+  description = "Path to Lambda deployment package zip file"
+  type        = string
+  default     = "lambda_function_payload.zip"
 }
 
-variable "private_subnet_a_cidr" {
-  default = "10.0.3.0/24"
-}
-
-variable "private_subnet_b_cidr" {
-  default = "10.0.4.0/24"
-}
-
-# ------------------------
-# RDS Variables
-# ------------------------
-variable "db_name" {
-  default = "ordersdb"
-}
-
-variable "db_username" {
-  default = "admin"
-}
-
-variable "db_password" {
-  default = "Admin12345"
-}
-
-variable "db_instance_class" {
-  default = "db.t3.micro"
-}
-
-# ------------------------
-# EKS Variables
-# ------------------------
-variable "cluster_name" {
-  default = "ecommerce-cluster"
+variable "lambda_role_arn" {
+  description = "IAM Role ARN for Lambda execution"
+  type        = string
+  default     = "arn:aws:iam::123456789012:role/lambda_exec_role"
 }
